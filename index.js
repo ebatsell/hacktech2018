@@ -27,8 +27,6 @@ module.exports = function (context, req) {
   });
   gather.say('Please press 1 or say sales for sales.');
 
-  console.log(response.toString());
-
   context.res = {
     status: 200,
     body: twiml.toString(),
