@@ -1,23 +1,10 @@
-const qs = require("querystring");
-const VoiceResponse = require('twilio').twiml.VoiceResponse;
-
-module.exports = function (context, req) {
-  context.log('triggered...');
-
-  const formValues = qs.parse(req.body);
-  // Insert spaces between numbers to aid text-to-speech engine
-  const phoneNumber = formValues.From.replace(/\+/g, '').split('').join(' ');
-
-  const twiml = new VoiceResponse();
-  console.log("phoneNumber",phoneNumber);
-  twiml.say('Your phone number is: ' + phoneNumber);
-
-  context.res = {
-    status: 200,
-    body: twiml.toString(),
-    headers: { 'Content-Type': 'application/xml' },
-    isRaw: true
-  };
-  
-  context.done();
+exports.handler = function(context, event, callback) {
+  const twiml = new Twilio.twiml.VoiceResponse();
+ 
+  twiml.gather({
+    input: 'speech',
+    timeout: 3,
+  }).say({loop:0,voice:'alice'},'Welcome to Hacktech 2018. Please list your symptoms...');
+ 
+  callback(null, twiml);
 };
