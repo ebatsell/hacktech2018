@@ -13,14 +13,14 @@ exports.handler = function(context, event, callback) {
     timeout: 1,
     numDigits: 1,
     action: '/get-response'
-  }).say('Press ,2, for Español,', {language: 'es'});
+  }).say('Presione, 2, para Español', {language: 'es'});
   
   gather = twiml.gather({
     input: 'dtmf',
     timeout: 1,
     numDigits: 1,
     action: '/get-response'
-  }).say('Press ,3, for Français,', {language: 'fr'});
+  }).say('Appuyez sur, 3, pour le Français', {language: 'fr'});
   
   gather = twiml.gather({
     input: 'dtmf',
