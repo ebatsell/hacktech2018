@@ -4,24 +4,27 @@ exports.handler = function(context, event, callback) {
   if (event.Digits) {
     switch (event.Digits) {
       case '1':
-        twiml.say('You selected English.');
+        twiml.say('You selected English.', {language: 'en'});
+        twiml.redirect('/en');
         break;
       case '2':
-        twiml.say('You selected Spanish.');
+        twiml.say('Has seleccionado Español.', {language: 'es'});
+        twiml.redirect('/es');
         break;
       case '3':
-        twiml.say('You selected French.');
+        twiml.say('vous avez sélectionné Français.', {language: 'fr'});
+        twiml.redirect('/fr');
         break;
       default:
-        twiml.say("Sorry, I don't understand that choice.").pause();
+        twiml.say("Sorry, I don't understand that choice.");
+        twiml.pause({length:2});
         twiml.redirect('/main');
         break;
     }
   } else {
-    // If no input was sent, redirect to the main menu
     twiml.redirect('/main');
   }
-  //twiml.say(`You said ${command}.`);
   
   callback(null, twiml);
 };
+
