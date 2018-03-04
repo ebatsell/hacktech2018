@@ -5,11 +5,11 @@ class GameSpider(scrapy.Spider):
     name = "game_spider"
 
     def start_requests(self):
-        urls = [
-            'http://www.espn.com/soccer/commentary?gameId=491423'
-        ]
-        for url in urls:
-            yield scrapy.Request(url=url, callback=self.parse)
+        base_url = 'http://www.espn.com/soccer/commentary?gameId=' #491423
+
+        f = open("ids.txt","r") #opens file with name of "test.txt"
+        match_id =f.readline()
+        yield scrapy.Request(url=base_url + match_id, callback=self.parse)
 
     def parse(self, response):
         #Extracting the content using css selectors

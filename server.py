@@ -1,10 +1,37 @@
 from flask import Flask, request, jsonify
 import requests
+import json
+import subprocess
+import time 
+import urllib 
 app = Flask(__name__)
 
 
+translate = '987f979870b7425f92f9a041b1fbadaa'
+subid = 'bdb830f6-0f61-4211-b902-32e2ae067fdd'
+url = 'https://api.cognitive.microsoft.com/sts/v1.0'
+def translate_text(original_text='Powerful storm leaves 9 dead, swaths of East Coast in the dark', language='es'):
+    params = {
+        text: original_text,
+        to: language,
+        type: 'text/plain',
+        appid: 'Bearer ' + translate
+    }
+
+
+    req = requests.get(url, params=params)
+    print(req)
+    print(req.body)
+    return ''
+
 @app.route('/news', methods=['GET'])
 def news_test():
+
+
+    # language = request.query.get('language')
+
+
+
     response = {
       "articles": [
         {
@@ -72,13 +99,56 @@ def news():
 
 @app.route('/live', methods=['GET'])
 def live_match():
-    # Use web scraping tools to get most recent post
+    # Use web scraping tools to get most recent occurance
     # Twilio will be calling this on a loop, and when something changes it will read out what happened
 
 
     req = requests.get()
     return jsonify({}), 200
 
+
+@app.route('/replay_dynamic', methods=['GET'])
+# @app.route('/replay', methods=['GET'])
+def replay_match_dynamic():
+    # Use web scraping tools to get all 
+    # Twilio will be calling this on a loop, and when something changes it will read out what happened
+
+    match_id = request.args.get('id')
+
+    # Somehow execute scraping command
+    try:
+        subprocess.call(['rm ENV_scrapy_Football/football/football.json'])
+    except:
+        pass
+
+    subprocess.call(['echo ' + match_id + ' > ENV_scrapy_Football/football/football/spiders/ids.txt'], shell=True)
+    subprocess.call(['cd ENV_scrapy_Football/football; scrapy crawl game_spider'], shell=True)
+
+    # req = requests.get()
+
+    # Load json from file
+    my_file_json = {}
+    time.sleep(.3)
+    with open('ENV_scrapy_Football/football/football.json') as json_data:
+        print(json_data)
+        my_file_json = json.load(json_data)
+        
+    response = {'events': my_file_json}
+    return jsonify(response), 200
+
+@app.route('/replay', methods=['GET'])
+# @app.route('/replay_static', methods=['GET'])
+def replay_match():
+    # Load json from file
+    my_file_json = {}
+    time.sleep(.3)
+    with open('ENV_scrapy_Football/football/football.json') as json_data:
+        print(json_data)
+        my_file_json = json.load(json_data)
+        
+    response = {'events': my_file_json}
+    print(response)
+    return jsonify(response), 200
 
 # Old method used for example syntax
 @app.route('/user', methods=['GET', 'POST'])
