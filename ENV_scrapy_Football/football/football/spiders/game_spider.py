@@ -13,8 +13,9 @@ class GameSpider(scrapy.Spider):
 
     def parse(self, response):
         #Extracting the content using css selectors
-        times = response.css('td.time-stamp::text').extract()
-        details = response.css('td.game-details::text').extract()
+        commentary = response.css('div.accordion.active')
+        times = commentary.css('td.time-stamp::text').extract()
+        details = commentary.css('td.game-details::text').extract()
 
         #Give the extracted content row wise
         for item in zip(times,details):
