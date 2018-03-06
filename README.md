@@ -1,2 +1,2 @@
-# hacktech2018
+# Hotline Helper
 Voice assistant through a phone call for information on health, news, sports, search...
